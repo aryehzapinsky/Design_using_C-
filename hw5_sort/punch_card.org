@@ -1,0 +1,4 @@
+* Tasks
+** Generate random integer sequences of certain lengths, sort and qsort
+   CLOCK: [2018-03-04 Sun 20:57]--[2018-03-04 Sun 23:58] =>  3:01
+** TODO
