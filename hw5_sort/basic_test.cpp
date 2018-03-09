@@ -7,11 +7,11 @@
 
 using namespace std;
 
-string fill_word ()
+string fill_word (int min_length, int max_length)
 {
     // Generate random word lengths
     random_device word_generator;
-    uniform_int_distribution<int> word_dist(2, 7);
+    uniform_int_distribution<int> word_dist(min_length, max_length);
     // Generate random letters
     random_device letter_generator;
     uniform_int_distribution<int> letter_dist(65, 122);
@@ -37,7 +37,7 @@ int main()
 
     for (int i = 0; i < n; ++i)
     {
-        string s = fill_word();
+        string s = fill_word(2, 7);
         //fill_word(s);
         holder.push_back(s);
     }
