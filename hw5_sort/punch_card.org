@@ -1,4 +1,9 @@
 * Tasks
 ** Generate random integer sequences of certain lengths, sort and qsort
    CLOCK: [2018-03-04 Sun 20:57]--[2018-03-04 Sun 23:58] =>  3:01
-** TODO
+* Restart HW from Scratch
+** Generate random integers
+   CLOCK: [2018-03-05 Mon 19:55]--[2018-03-05 Mon 20:17] =>  0:01
+** Generate random strings
+   CLOCK: [2018-03-06 Tue 13:23]
+   CLOCK: [2018-03-05 Mon 20:18]--[2018-03-05 Mon 21:58] =>  1:40

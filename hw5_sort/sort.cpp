@@ -3,73 +3,199 @@
 #include <cstdlib>
 #include <random>
 #include <limits>
+#include <memory>
+#include <vector>
+#include <string>
+#include <cstring>
 
 using namespace std;
+using Clock = chrono::steady_clock;
 
-
-class Timer {
-    using Clock = chrono::system_clock;
-    chrono::time_point<Clock> start;
-    chrono::time_point<Clock> end;
-public:
-    void start_timer() {start=Clock::now();}
-    void end_timer() {end=Clock::now();}
-    chrono::duration<double> record_duration() {return end-start;}
-};
-
-void fill_random_ints(int n, vector<int> &v1, vector<int> &v2)
+void run_random_int(int n)
 {
+    vector<int> v1;
+    vector<int> v2;
+
+    // Generate vectors of random integers
     random_device generator;
     uniform_int_distribution<int> distribution(0, numeric_limits<int>::max());
+
     for (int i = 0; i < n; ++i)
     {
         int rando = distribution(generator);
         v1.push_back(rando);
         v2.push_back(rando);
     }
-    //for (auto i : v2) cout<<i<< " ";
+
+    // for(auto q:v1) cout<<q<<" ";
+    // cout<<"\n";
+
+    // Sort
+    auto start = Clock::now();
+    sort(v1.begin(), v1.end());
+    auto end = Clock::now();
+    chrono::duration<double> sort_time = end-start;
+
+    // QSort
+    start = Clock::now();
+    qsort(&v2[0], v2.size(), sizeof(int), [](const void* a, const void* b)
+    {
+        int arg1 = *static_cast<const int*>(a);
+        int arg2 = *static_cast<const int*>(b);
+
+        if(arg1 < arg2) return -1;
+        if(arg1 > arg2) return 1;
+        return 0;
+    });
+    end = Clock::now();
+
+    chrono::duration<double> qsort_time = end-start;
+
+    // for (auto q:v1) cout<<q<<" ";
+    // cout<<"\n";
+    // for (auto q:v2) cout<<q<<" ";
+    // cout<<"\n";
+
+    cout<< n << " elements\n Sort Time\tQSort Time\n";
+    cout<< sort_time.count()<< "\t" << qsort_time.count() << "\n";
 }
 
-void fill_random_c_strings(int n, vector<char *> &v1, vector<char *> &v2) {
-    char myString[] = "string";
+void run_random_char(int n)
+{
+    //vector<unique_ptr<const char*>> v1;
+    //vector<unique_ptr<const char*>> v2;
+
+    char v1[n][32];
+    char v2[n][32];
+
+    // Generate random word lengths
+    random_device word_generator;
+    uniform_int_distribution<int> word_dist(2, 4);
+    // Generate random letters
+    random_device letter_generator;
+    uniform_int_distribution<int> letter_dist(65, 122);
+
     for (int i = 0; i < n; ++i)
     {
-        v1.push_back(myString);
-        v2.push_back(myString);
-    }
-}
-void run_random_ints(int n)
-{
-    Timer recorder;
-    vector<int> v1;
-    vector<int> v2;
+        int rando = word_dist(word_generator);
+        string s;
+        for (int j = 0; j < rando; ++j) {
+            auto letter = letter_dist(letter_generator);
+            while (!isalpha(letter))
+                letter = letter_dist(letter_generator);
+            s.push_back(letter);
+        }
+        strcpy(v1[i], s.data());
+        strcpy(v2[i], s.data());
+     }
 
-    fill_random_ints(n, v1, v2);
-    recorder.start_timer();
-    sort(v1.begin(), v1.end());
-    recorder.end_timer();
-    auto sort_time = recorder.record_duration().count();
+    for(auto q:v1) cout<<q<<" ";
+    cout<<"\n";
+    // for(auto q:v2) cout<<q<<" ";
+    // cout<<"\n";
 
-    recorder.start_timer();
-    qsort(&v2[0], v2.size(), sizeof(int), [](const void* a, const void* b)
+    // vector<char *> v1 (wo, wo+n);
+    // for(auto q:v1) cout<<q<<" ";
+    // cout<<"\n";
+    // vector<char *> v2 (wo, wo+n);
+    // for(auto q:v1) cout<<q<<" ";
+    // cout<<"\n";
+
+    // Sort
+    auto start = Clock::now();
+    //sort(v1, v1+n);
+    auto end = Clock::now();
+    chrono::duration<double> sort_time = end-start;
+
+    for(auto q:v2) cout<<q<<" ";
+    cout<<"\n";
+    // // QSort
+    // start = Clock::now();
+    qsort(v2, n, sizeof(char *), [](const void* a, const void* b)
           {
-              int arg1 = *static_cast<const int*>(a);
-              int arg2 = *static_cast<const int*>(b);
+              const char **arg1 = (const char**)a;
+              const char **arg2 = (const char**)b;
+          //const char* arg2 = static_cast<const char*>(b);
 
-              if(arg1 < arg2) return -1;
-              if(arg1 > arg2) return 1;
-              return 0;
+              return strcmp(*arg1, *arg2);
           });
-    recorder.end_timer();
-    auto qsort_time = recorder.record_duration().count();
-    cout<< n << "elements\tSort Time\tQSort Time\n\t" << sort_time << "\t" << qsort_time;
+    // end = Clock::now();
+
+    // chrono::duration<double> qsort_time = end-start;
+
+    for (auto q:v1) cout<<q<<" ";
+    cout<<"\n";
+    for (auto q:v2) cout<<q<<" ";
+    cout<<"\n";
+
+    // cout<< n << " elements\n Sort Time\tQSort Time\n";
+    // cout<< sort_time.count()<< "\t" << qsort_time.count() << "\n";
+}
+
+void run_random_str(int n)
+{
+    vector<string> v1;
+    vector<string> v2;
+
+    // Generate random word lengths
+    random_device word_generator;
+    uniform_int_distribution<int> word_dist(2, 7);
+    // Generate random letters
+    random_device letter_generator;
+    uniform_int_distribution<int> letter_dist(65, 122);
+
+    for (int i = 0; i < n; ++i)
+    {
+        int rando = word_dist(word_generator);
+        string s;
+        for (int j = 0; j < rando; ++j) {
+            auto letter = letter_dist(letter_generator);
+            while (!isalpha(letter))
+                letter = letter_dist(letter_generator);
+            s.push_back(letter);
+        }
+        //s.resize(32);
+        v1.push_back(s);
+        v2.push_back(s);
+    }
+
+    for(auto q:v1) cout<<q<<" ";
+    cout<<"\n";
+    for(auto q:v2) cout<<q<<" ";
+    cout<<"\n";
+
+    // Sort
+    auto start = Clock::now();
+    sort(v1.begin(), v1.end());
+    auto end = Clock::now();
+    chrono::duration<double> sort_time = end-start;
+
+    // QSort
+    start = Clock::now();
+    qsort(v2.data(), v2.size(), sizeof(char *), [](const void* a, const void* b)
+    {
+        const char **arg1 = (const char**)a;
+        const char **arg2 = (const char**)b;
+
+        return strcmp(*arg1, *arg2);
+    });
+    end = Clock::now();
+
+    chrono::duration<double> qsort_time = end-start;
+
+    for (auto q:v1) cout<<q<<" ";
+    cout<<"\n";
+    for (auto q:v2) cout<<q<<" ";
+    cout<<"\n";
+
+    // cout<< n << " elements\n Sort Time\tQSort Time\n";
+    // cout<< sort_time.count()<< "\t" << qsort_time.count() << "\n";
 }
 
 int main()
 {
-    run_random_ints(5);
-    vector<char *> v1;
-    vector<char *> v2;
-    fill_random_c_strings(3, v1, v2);
-    for (auto i:v1) cout<<i<<" ";
+    run_random_int(5000);
+    run_random_int(400000);
+    run_random_int(800000);
+    //run_random_char(5);
 }
