@@ -11,6 +11,17 @@
 using namespace std;
 using Clock = chrono::steady_clock;
 
+struct Record
+{
+    string s;
+    char* p;
+    int x;
+    double d;
+
+    Record(int rx, double rd, string rs, const char* rp):s{rs}, x{5}
+    {
+    }
+};
 
 string fill_word (int min_length, int max_length)
 {
@@ -130,15 +141,10 @@ void run_random_str(int n)
 
     for (int i = 0; i < n; ++i)
     {
-        string s = fill_word(2, 5);
+        string s = fill_word(2,7);
         v1.push_back(s);
         v2.push_back(s);
     }
-
-    for (auto k : v1) cout<<k<<" ";
-    cout<<"\n";
-    for (auto k : v2) cout<<k<<" ";
-    cout<<"\n";
 
     // Sort
     auto start = Clock::now();
@@ -149,79 +155,22 @@ void run_random_str(int n)
     for(auto k : v1) cout<<k<<" ";
     cout<<"\n";
 
-    // QSort
-    start = Clock::now();
-    qsort(v2.data(), v2.size(), sizeof(char *), [](const void* a, const void* b)
-    {
-        const string arg1 = *(const string*)a;
-        const string arg2 = *(const string*)b;
+    // // QSort
+    // start = Clock::now();
+    // qsort(v2.data(), v2.size(), sizeof(char *), [](const void* a, const void* b)
+    // {
+    //     const string arg1 = *(const string*)a;
+    //     const string arg2 = *(const string*)b;
 
-        return strcmp(arg1.c_str(), arg2.c_str());
-    });
-    end = Clock::now();
-    chrono::duration<double> qsort_time = end-start;
+    //     return strcmp(arg1.c_str(), arg2.c_str());
+    // });
+    // end = Clock::now();
+    // chrono::duration<double> qsort_time = end-start;
 
-    for(auto k : v1) cout<<k<<" ";
-    cout<<"\n";
-    cout<< n << " elements\n Sort Time\tQSort Time\n";
-    cout<< sort_time.count()<< "\t" << qsort_time.count() << "\n";
-// }{
-//     vector<string> v1;
-//     vector<string> v2;
-
-//     // Generate random word lengths
-//     random_device word_generator;
-//     uniform_int_distribution<int> word_dist(2, 7);
-//     // Generate random letters
-//     random_device letter_generator;
-//     uniform_int_distribution<int> letter_dist(65, 122);
-
-//     for (int i = 0; i < n; ++i)
-//     {
-//         int rando = word_dist(word_generator);
-//         string s;
-//         for (int j = 0; j < rando; ++j) {
-//             auto letter = letter_dist(letter_generator);
-//             while (!isalpha(letter))
-//                 letter = letter_dist(letter_generator);
-//             s.push_back(letter);
-//         }
-//         //s.resize(32);
-//         v1.push_back(s);
-//         v2.push_back(s);
-//     }
-
-//     for(auto q:v1) cout<<q<<" ";
-//     cout<<"\n";
-//     for(auto q:v2) cout<<q<<" ";
-//     cout<<"\n";
-
-//     // Sort
-//     auto start = Clock::now();
-//     sort(v1.begin(), v1.end());
-//     auto end = Clock::now();
-//     chrono::duration<double> sort_time = end-start;
-
-//     // QSort
-//     start = Clock::now();
-//     qsort(v2.data(), v2.size(), sizeof(char *), [](const void* a, const void* b)
-//     {
-//         const char **arg1 = (const char**)a;
-//         const char **arg2 = (const char**)b;
-
-//         return strcmp(*arg1, *arg2);
-//     });
-//     end = Clock::now();
-
-//     chrono::duration<double> qsort_time = end-start;
-
-//     for (auto q:v1) cout<<q<<" ";
-//     cout<<"\n";
-//     for (auto q:v2) cout<<q<<" ";
-//     cout<<"\n";
-
-//     // cout<< n << " elements\n Sort Time\tQSort Time\n";
-//     // cout<< sort_time.count()<< "\t" << qsort_time.count() << "\n";
+    // cout<< n << " elements\n Sort Time\tQSort Time\n";
+    // cout<< sort_time.count()<< "\t" << qsort_time.count() << "\n";
+    cout<< n << " elements\n Sort Time";
+    cout<< sort_time.count()<< "\n";
 }
 
 int main()
@@ -231,8 +180,10 @@ int main()
     //     cout<<"Random Char * ";
     //     run_random_char(i);
     // }
-    // run_random_int(5000);
-    // run_random_int(400000);
-    // run_random_int(800000);
     run_random_str(5);
+    int x{5};
+    cout<< x;
+    string s{"random string"};
+    Record r = {5, 5.1, s, s.c_str()};
+    cout<<r.s;
 }
